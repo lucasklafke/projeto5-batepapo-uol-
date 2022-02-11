@@ -24,10 +24,16 @@ header{
 /************************************************************/
 section{
     margin-top: 100px;
+    margin-bottom: 100px;
+    width: 100%;
 }
 .message{
     min-height: 40px;
     margin-top: 4px;
+    align-items: center;
+    display: flex;
+    padding-left: 8px;
+    max-width: 100%;
 }
 .private{
     background-color: #FFDEDE;
@@ -35,7 +41,7 @@ section{
 .public{
     background-color: #fff;
 }
-.stats{
+.status{
     background-color: #DCDCDC;
 }
 /************************************************************/
@@ -70,4 +76,10 @@ button{
 ion-icon{
     width: 100%;
     height: 100%;
+}
+span{
+
+}
+.names{
+    font-weight: bold;
 }
