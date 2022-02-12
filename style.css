@@ -26,6 +26,7 @@ section{
     margin-top: 100px;
     margin-bottom: 100px;
     width: 100%;
+    overflow: scroll
 }
 .message{
     min-height: 40px;
@@ -34,6 +35,8 @@ section{
     display: flex;
     padding-left: 8px;
     max-width: 100%;
+    word-break: break-all;
+    background-color: #fff;
 }
 .private{
     background-color: #FFDEDE;
@@ -80,6 +83,11 @@ ion-icon{
 span{
 
 }
-.names{
+.names,.to{
     font-weight: bold;
+    margin-right: 5px;
+}
+.time{
+    color: #AAAAAA;
+    padding-right: 10px;
 }
