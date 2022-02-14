@@ -1,6 +1,16 @@
 let person = []
+document.addEventListener("keypress",function(e){
+    if(e.key === "Enter"){
+        sendMessage()
+        console.log("enter")
+    }
+});
 function getName(){
     const name = prompt("tell your name or username")
+    if(name.length > 20){
+        window.alert("Name invalid")
+        setName()
+    }
     return name
 }
 
@@ -8,14 +18,18 @@ function setName(){
     const objectPerson = {
         name : getName()
     }
-    person.push(objectPerson)
+    person[0] = (objectPerson)
     postName()
 }
 
 function postName(){
     const promise = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants",person[0])
     promise.then(whenTrue)
-    promise.catch(whenFalse)
+    promise.catch(whenNameFalse)
+}
+function whenNameFalse(){
+    window.alert("Name invalid")
+    setName()
 }
 function postStatus(){
     const promise = axios.post("https://mock-api.driven.com.br/api/v4/uol/status",person[0])
@@ -23,8 +37,9 @@ function postStatus(){
     promise.catch(whenFalse)
 }
 function verifyStats(){
-    console.log("entrei")
-    searchNewMessages()
+    console.log('oi')
+    searchMessages()
+
 }
 
 function searchMessages(){
@@ -36,44 +51,23 @@ function loadMessages(response){
     const arrayMessages = response.data
     
     const section = document.querySelector("section")
+    section.innerHTML = ''
     for(i = 0; i < arrayMessages.length; i++){
-        if(arrayMessages[i].type == 'status'){console.log(arrayMessages[1])
-            section.innerHTML += `<div class="message ${arrayMessages[i].type}">
+        if(arrayMessages[i].type == 'status'){
+            section.innerHTML += `<div class="message ${arrayMessages[i].type}" data-identifier="message">
             <span class="time">(${arrayMessages[i].time})</span> <span class="names">${arrayMessages[i].from}</span></span>${arrayMessages[i].text}
             </div>`
         } else {
-            section.innerHTML += `<div class="message ${arrayMessages[i].type}">
+            section.innerHTML += `<div class="message ${arrayMessages[i].type}" data-identifier="message">
             <span class="time">(${arrayMessages[i].time})</span>
-            <span class="names">${arrayMessages[i].from}</span> <span>para <span class="to">${arrayMessages[i].to}:</span></span> </span>${arrayMessages[i].text}
+            <span class="names">${arrayMessages[i].from}</span> <span>para<span class="to">${arrayMessages[i].to}:</span></span></span>
+            <span class="message-text">${arrayMessages[i].text}</span>
             </div>`
         }
     }
 }
 function loadError(response){
     console.log(response)
-}
-function searchNewMessages(){
-    const promise = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
-    promise.then(loadNewMessages)
-    promise.catch(loadError)
-}
-function loadNewMessages(response){
-    const section = document.querySelector("section")
-    section.innerHTML = ''
-    const arrayMessages = response.data
-    for(i = 0; i < arrayMessages.length; i++){
-        console.log(arrayMessages.type)
-        if(arrayMessages[i].type == 'status'){
-            section.innerHTML += `<div class="message ${arrayMessages[i].type}">
-            <span class="time">(${arrayMessages[i].time})</span> <span class="names">${arrayMessages[i].from}</span></span>${arrayMessages[i].text}
-            </div>`
-        } else {
-            section.innerHTML += `<div class="message ${arrayMessages[i].type}">
-            <span class="time">(${arrayMessages[i].time})</span>
-            <span class="names">${arrayMessages[i].from}</span> <span>para <span class="to">${arrayMessages[i].to}:</span></span> </span>${arrayMessages[i].text}
-            </div>`
-        }
-    }
 }
 function getMessage(){
     let input = document.querySelector("input")
@@ -96,8 +90,6 @@ function createPerson(){
 
 function sendMessage(){
         createPerson()
-        console.log(person[1])
-        console.log("hum")
         const promise = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages",person[1])
         promise.then(whenTrue)
         promise.catch(whenFalse)
@@ -105,15 +97,15 @@ function sendMessage(){
 
 function whenTrue(response){
     const infos = response.data
-    console.log(infos)
-    setInterval(verifyStats,3000);
-    searchNewMessages()
+    searchMessages()
 }
 
 function whenFalse(response){
     console.log("deuruim")
     console.log(response.data) 
 }
+
 setName()
 searchMessages()
+setInterval(verifyStats,3000);
 setInterval(postStatus,5000)
